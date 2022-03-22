@@ -24,10 +24,12 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '@/assets/css/reset.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '@/plugins/vee-validate.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -41,6 +43,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -51,5 +54,20 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  },
+
+  auth: {
+  strategies: {
+    'laravelJWT': {
+      provider: 'laravel/jwt',
+      url: 'http://localhost:8000',
+      token: {
+        maxAge: 60 * 60
+      },
+      refreshToken: {
+        maxAge: 20160 * 60
+      }
+    },
+  },
+},
 }
