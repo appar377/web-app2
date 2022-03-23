@@ -3,11 +3,11 @@
     <Aside class="aside"></Aside>
 
     <div class="share__wrapper">
-      <h2 class="share__wrapper__ttl">ホーム</h2>
+      <h2 class="share__wrapper__ttl" @click="getShare">ホーム</h2>
       <ul class="share__list">
         <li class="share__list__item" v-for="item in items" :key="item.id">
           <div class="list__item__display">
-            <h3 class="share__list__ttl">{{item.share}}</h3>
+            <h3 class="share__list__ttl">{{}}</h3>
             <div class="heart">
               <img src="../img/heart.png">
             </div>
@@ -18,10 +18,10 @@
             </div>
 
             <div class="detail">
-              <img src="../img/detail.png">
+              <img src="../img/detail.png" @click="$router.push('/comment')">
             </div>
           </div>
-          <p>{{item.name}}</p>
+          <p>{{item.share}}</p>
         </li>
       </ul>
     </div>
@@ -36,9 +36,9 @@ export default {
     }
   },
   methods: {
-    async getLoginUser() {
+    async getShare() {
       const resData = await this.$axios.get(
-        "http://127.0.0.1:8000/api/rest/"
+        "http://127.0.0.1:8000/api/v1/share/"
       );
       this.items = resData.data.data;
     },

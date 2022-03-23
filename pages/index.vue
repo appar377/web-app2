@@ -50,7 +50,7 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((data) => {
           data.user.sendEmailVerification().then(() => {
-            this.$router.replace('/home')
+            this.$router.replace({ path: '/home' , query :{ name: this.name, email: this.email }})
           })
         })
         .catch((error) => {
@@ -73,12 +73,13 @@ export default {
     },
     
     async insertLoginUser() {
-      const sendData = [
-        this.name,
-        this.email,
-      ];
+      const sendData = {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+      };
       console.log(sendData);
-      await this.$axios.post("http://127.0.0.1:8000/api/v1/rest/", sendData);
+      await this.$axios.post("http://127.0.0.1:8000/api/v1/user/", sendData);
     },
   },
 }

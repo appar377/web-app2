@@ -5,7 +5,7 @@
     <validation-observer ref="obs" v-slot="ObserverProps">
 
       <form class="login__form" action="login" method="POST">
-        
+
         <h2 class="login__form__ttl">ログイン</h2>
 
         <validation-provider v-slot="ProviderProps" rules="required">
@@ -45,7 +45,7 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(() => {
-          this.$router.push('/home')
+          this.$router.push({ path: '/home' , query :{ email: this.email, password: this.password }})
         })
     }
   },

@@ -14,11 +14,11 @@
       </li>
     </ul>
 
-    <form action="/share" method="POST" class="share__form">
+    <form class="share__form">
       <label for="share">シェア</label>
       <textarea type="text" name="share" rows="10" v-model="share"></textarea>
 
-      <button>シェアする</button>
+      <button @click="postShare">シェアする</button>
     </form>
   </aside>
 </template>
@@ -40,6 +40,14 @@ export default {
           this.$router.replace('/login')
         })
     },
+    async  postShare() {
+      const sendData = {
+        name: this.$route.query.name,
+        email: this.$route.query.email,
+        share: this.share,
+      };
+      await this.$axios.post("http://127.0.0.1:8000/api/v1/share/", sendData);
+    }
   },
 }
 </script>
