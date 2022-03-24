@@ -7,18 +7,18 @@
       <ul class="share__list">
         <li class="share__list__item" v-for="item in items" :key="item.id">
           <div class="list__item__display">
-            <h3 class="share__list__ttl">{{}}</h3>
+            <h3 class="share__list__ttl">{{item.user.name}}</h3>
             <div class="heart">
               <img src="../img/heart.png">
             </div>
             <p class="heart__count">0</p>
 
-            <div class="cross">
-              <img src="../img/cross.png">
+            <div class="cross" @click="deleteShare(item.id)">
+              <img src="../img/cross.png" >
             </div>
 
             <div class="detail">
-              <img src="../img/detail.png" @click="$router.push('/comment')">
+              <img src="../img/detail.png" @click="showShare(item.id)">
             </div>
           </div>
           <p>{{item.share}}</p>
@@ -42,6 +42,17 @@ export default {
       );
       this.items = resData.data.data;
     },
+    async deleteShare(id) {
+      await this.$axios.delete("http://127.0.0.1:8000/api/v1/share/" + id);
+      this.getShare();
+    },
+    async showShare(id) {
+      const showData = await this.$axios.get("http://127.0.0.1:8000/api/v1/share/" + id);
+      this.$router.push({ path: '/comment' , query : showData.data.data})
+    },
+  },
+  created() {
+    this.getShare()
   },
 }
 </script>
@@ -90,6 +101,7 @@ export default {
 }
 
 .share__list__ttl {
+  width: 30px;
   color:  white;
   padding: 10px;
 }

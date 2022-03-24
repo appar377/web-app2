@@ -6,9 +6,15 @@
         <h2 class="share__wrapper__ttl">コメント</h2>
         
         <ul class="share__list">
-          <li class="share__list__item">
+          <li class="share__list__item" v-for="jsonData in this.$route.query">
+            <input type="hidden" v-model="share_id" value="jsonData.id">
+
+            <input type="hidden" v-model="user_id" value="jsonData.user_id">
+
             <div class="list__item__display">
-              <h3 class="share__list__ttl">{{}}</h3>
+              <h3 class="share__list__ttl">
+                {{jsonData.user.name}}
+              </h3>
 
               <div class="heart">
                 <img src="../img/heart.png">
@@ -19,30 +25,30 @@
                 <img src="../img/cross.png">
               </div>
             </div>
-            <p>{{}}</p>
+            <p>{{jsonData.share}}</p>
           </li>
         </ul>
       </div>
 
       <p class="comment__ttl">コメント</p>
       <ul class="comment__list">
-        <li class="comment__list__item" v-for="item in items" :key="item.id">
+        <li class="comment__list__item" v-for="(jsonData, index) in this.$route.query" :key="index">
           <p class="comment__list__ttl">
-            {{item.id}}
+            {{jsonData.user.name}}
           </p>
           <p class="comment__list__content">
-            {{item.comment}}
+            {{jsonData.comments[index].comment}}
           </p>
         </li>
       </ul>
 
       <form class="comment__form">
         <div class="comment__input">
-          <input type="text">
+          <input type="text" v-model="comment">
         </div>
 
         <div class="comment__button">
-          <button>コメント</button>
+          <button @click="insertComment">コメント</button>
         </div>
       </form>
     </div>
@@ -54,14 +60,19 @@ export default {
   data() {
     return {
       items: [],
+      comment: "",
+      share_id: "",
+      user_id: "",
     }
   },
   methods: {
-    async getComment() {
-      const resData = await this.$axios.get(
-        "http://127.0.0.1:8000/api/v1/comment/"
-      );
-      this.items = resData.data.data;
+    async  insertComment() {
+      const sendData = {
+        comment: this.comment,
+        share_id: this.share.id,
+        user_id: this.user_id
+      };
+      await this.$axios.post("http://127.0.0.1:8000/api/v1/comment/", sendData);
     },
   },
 }
@@ -109,6 +120,11 @@ export default {
   width: 100%;
 }
 
+.share__list__ttl {
+  color:  white;
+  padding: 10px;
+}
+
 .heart,
 .cross,
 .heart__count {
@@ -116,20 +132,9 @@ export default {
   padding: 10px;
 }
 
-.share__list__ttl {
-  color:  white;
-  padding: 10px;
-}
-
 .heart img,
 .cross img {
   width: 100%;
-}
-
-
-.share__list__ttl {
-  color:  white;
-  padding: 10px;
 }
 
 .comment__ttl {
@@ -174,6 +179,7 @@ export default {
   border: 1px solid white;
   background-color: black;
   caret-color: white;
+  color: white;
 }
 
 .comment__button {
