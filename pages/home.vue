@@ -3,7 +3,7 @@
     <Aside class="aside"></Aside>
 
     <div class="share__wrapper">
-      <h2 class="share__wrapper__ttl" @click="getShare">ホーム</h2>
+      <h2 class="share__wrapper__ttl">ホーム</h2>
       <ul class="share__list">
         <li class="share__list__item" v-for="item in items" :key="item.id">
           <div class="list__item__display">
@@ -29,10 +29,13 @@
 </template>
 
 <script>
+import firebase from "~/plugins/firebase";
+
 export default {
   data() {
     return {
       items: [],
+      email: null,
     }
   },
   methods: {
@@ -50,9 +53,16 @@ export default {
       const showData = await this.$axios.get("http://127.0.0.1:8000/api/v1/share/" + id);
       this.$router.push({ path: '/comment' , query : showData.data.data})
     },
+    checkLogin() {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.email = user.email;
+        }
+      });
+    }
   },
   created() {
-    this.getShare()
+    this.getShare();
   },
 }
 </script>

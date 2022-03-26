@@ -24,11 +24,12 @@
 </template>
 
 <script>
-import firebase from '~/plugins/firebase'
+import firebase from '~/plugins/firebase';
 export default {
   data() {
     return {
       share: "",
+      email: "",
     }
   },
   methods: {
@@ -40,12 +41,20 @@ export default {
           this.$router.replace('/login')
         })
     },
-    async  postShare() {
+    checkLogin() {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.email = user.email;
+        }
+      });
+    },
+    async postShare() {
+      this.checkLogin();
       const sendData = {
-        name: this.$route.query.name,
-        email: this.$route.query.email,
+        email: this.email,
         share: this.share,
       };
+      console.log(sendData);
       await this.$axios.post("http://127.0.0.1:8000/api/v1/share/", sendData);
     }
   },

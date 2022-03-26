@@ -7,9 +7,8 @@
         
         <ul class="share__list">
           <li class="share__list__item" v-for="jsonData in this.$route.query">
-            <input type="hidden" v-model="share_id" value="jsonData.id">
 
-            <input type="hidden" v-model="user_id" value="jsonData.user_id">
+            <input type="hidden" v-model="share_id" value="jsonData.id">
 
             <div class="list__item__display">
               <h3 class="share__list__ttl">
@@ -56,24 +55,34 @@
 </template>
 
 <script>
+import firebase from "~/plugins/firebase";
 export default {
   data() {
     return {
       items: [],
       comment: "",
       share_id: "",
-      user_id: "",
+      email: ""
     }
   },
   methods: {
     async  insertComment() {
+      checkLogin();
       const sendData = {
         comment: this.comment,
         share_id: this.share.id,
-        user_id: this.user_id
+        email: this.email
       };
+      console.log(sendData);
       await this.$axios.post("http://127.0.0.1:8000/api/v1/comment/", sendData);
     },
+    checkLogin() {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.email = user.email;
+        }
+      });
+    }
   },
 }
 </script>
