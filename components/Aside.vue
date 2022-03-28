@@ -15,7 +15,7 @@
     </ul>
 
     <form class="share__form">
-      <label for="share">シェア</label>
+      <label for="share" @click="console.log(email)">シェア</label>
       <textarea type="text" name="share" rows="10" v-model="share"></textarea>
 
       <button @click="postShare">シェアする</button>
@@ -28,8 +28,8 @@ import firebase from '~/plugins/firebase';
 export default {
   data() {
     return {
-      share: "",
-      email: "",
+      share: null,
+      email: null,
     }
   },
   methods: {
@@ -42,11 +42,11 @@ export default {
         })
     },
     checkLogin() {
-      firebase.auth().onAuthStateChanged((user) => {
+      firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          this.email = user.email;
+          this.email = user.email
         }
-      });
+      })
     },
     async postShare() {
       this.checkLogin();
@@ -57,6 +57,9 @@ export default {
       console.log(sendData);
       await this.$axios.post("http://127.0.0.1:8000/api/v1/share/", sendData);
     }
+  },
+  mounted() {
+    this.checkLogin();
   },
 }
 </script>

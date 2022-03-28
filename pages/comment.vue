@@ -47,7 +47,7 @@
         </div>
 
         <div class="comment__button">
-          <button @click="insertComment">コメント</button>
+          <button @click="postComment">コメント</button>
         </div>
       </form>
     </div>
@@ -66,23 +66,25 @@ export default {
     }
   },
   methods: {
-    async  insertComment() {
-      checkLogin();
+    async  postComment() {
+      this.checkLogin();
       const sendData = {
         comment: this.comment,
         share_id: this.share.id,
         email: this.email
       };
-      console.log(sendData);
       await this.$axios.post("http://127.0.0.1:8000/api/v1/comment/", sendData);
     },
     checkLogin() {
-      firebase.auth().onAuthStateChanged((user) => {
+      firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          this.email = user.email;
+          this.email = user.email
         }
-      });
+      })
     }
+  },
+  mounted() {
+    this.checkLogin();
   },
 }
 </script>

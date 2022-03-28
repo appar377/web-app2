@@ -9,9 +9,9 @@
           <div class="list__item__display">
             <h3 class="share__list__ttl">{{item.user.name}}</h3>
             <div class="heart">
-              <img src="../img/heart.png">
+              <img src="../img/heart.png" @click="changeCount">
             </div>
-            <p class="heart__count">0</p>
+            <p class="heart__count">{{count}}</p>
 
             <div class="cross" @click="deleteShare(item.id)">
               <img src="../img/cross.png" >
@@ -30,15 +30,27 @@
 
 <script>
 import firebase from "~/plugins/firebase";
-
+import Aside
+ from "~/components/Aside.vue";
 export default {
+  comments: {
+    Aside
+  },
   data() {
     return {
       items: [],
       email: null,
+      count: 0,
     }
   },
   methods: {
+    changeCount() {
+      if(this.count==0) {
+        this.count = 1;
+      } else if(this.count==1) {
+        this.count = 0;
+      };
+    },
     async getShare() {
       const resData = await this.$axios.get(
         "http://127.0.0.1:8000/api/v1/share/"
@@ -54,15 +66,16 @@ export default {
       this.$router.push({ path: '/comment' , query : showData.data.data})
     },
     checkLogin() {
-      firebase.auth().onAuthStateChanged((user) => {
+      firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          this.email = user.email;
+          this.email = user.email
         }
-      });
+      })
     }
   },
-  created() {
+  mounted() {
     this.getShare();
+    this.checkLogin();
   },
 }
 </script>
