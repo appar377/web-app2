@@ -47,7 +47,7 @@
         </div>
 
         <div class="comment__button">
-          <button @click="postComment">コメント</button>
+          <button @click="postComment" type="button">コメント</button>
         </div>
       </form>
     </div>

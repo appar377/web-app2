@@ -18,7 +18,7 @@
       <label for="share" @click="console.log(email)">シェア</label>
       <textarea type="text" name="share" rows="10" v-model="share"></textarea>
 
-      <button @click="postShare">シェアする</button>
+      <button @click="postShare" type="button">シェアする</button>
     </form>
   </aside>
 </template>
@@ -55,7 +55,7 @@ export default {
         share: this.share,
       };
       console.log(sendData);
-      await this.$axios.post("http://127.0.0.1:8000/api/v1/share/", sendData);
+      await this.$axios.post("http://127.0.0.1:8000/api/v1/share", sendData);
     }
   },
   mounted() {
