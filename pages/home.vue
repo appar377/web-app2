@@ -9,9 +9,9 @@
           <div class="list__item__display">
             <h3 class="share__list__ttl">{{item.user.name}}</h3>
             <div class="heart">
-              <img src="../img/heart.png" @click="changeCount">
+              <img src="../img/heart.png" @click="changeCount(item.id)">
             </div>
-            <p class="heart__count">{{count}}</p>
+            <p class="heart__count">{{item.user.like_count}}</p>
 
             <div class="cross" @click="deleteShare(item.id)">
               <img src="../img/cross.png" >
@@ -40,16 +40,12 @@ export default {
     return {
       items: [],
       email: null,
-      count: 0,
     }
   },
   methods: {
-    changeCount() {
-      if(this.count==0) {
-        this.count = 1;
-      } else if(this.count==1) {
-        this.count = 0;
-      };
+    async changeCount(id) {
+        await this.$axios.put("http://127.0.0.1:8000/api/v1/user/" + id);
+        location.reload();
     },
     async getShare() {
       const resData = await this.$axios.get(

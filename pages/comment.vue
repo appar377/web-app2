@@ -16,7 +16,7 @@
               <div class="heart">
                 <img src="../img/heart.png">
               </div>
-              <p class="heart__count">0</p>
+              <p class="heart__count">{{this.$route.query.user.like_count}}</p>
 
               <div class="cross">
                 <img src="../img/cross.png" @click="deleteShare(share_id)">
@@ -72,6 +72,7 @@ export default {
       };
       await this.$axios.post("http://127.0.0.1:8000/api/v1/comment/", sendData);
       this.comment = "";
+      location.reload();
     },
     checkLogin() {
       firebase.auth().onAuthStateChanged(user => {
@@ -86,6 +87,7 @@ export default {
     } ,
     async deleteShare(id) {
       await this.$axios.delete("http://127.0.0.1:8000/api/v1/share/" + id);
+      this.$router.push('home');
     },
   },
   mounted() {
