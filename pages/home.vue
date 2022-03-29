@@ -124,7 +124,7 @@ export default {
 }
 
 .share__list__ttl {
-  width: 30px;
+  width: 150px;
   color:  white;
   padding: 10px;
 }

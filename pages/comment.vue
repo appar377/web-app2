@@ -6,13 +6,11 @@
         <h2 class="share__wrapper__ttl">コメント</h2>
         
         <ul class="share__list">
-          <li class="share__list__item" v-for="jsonData in this.$route.query">
-
-            <input type="hidden" v-model="share_id" value="jsonData.id">
+          <li class="share__list__item">
 
             <div class="list__item__display">
               <h3 class="share__list__ttl">
-                {{jsonData.user.name}}
+                {{this.$route.query.user.name}}
               </h3>
 
               <div class="heart">
@@ -21,23 +19,23 @@
               <p class="heart__count">0</p>
 
               <div class="cross">
-                <img src="../img/cross.png">
+                <img src="../img/cross.png" @click="deleteShare(share_id)">
               </div>
             </div>
-            <p>{{jsonData.share}}</p>
+            <p>{{this.$route.query.share}}</p>
           </li>
         </ul>
       </div>
 
       <p class="comment__ttl">コメント</p>
       <ul class="comment__list">
-        <li class="comment__list__item" v-for="(jsonData, index) in this.$route.query" :key="index">
-          <p class="comment__list__ttl">
-            {{jsonData.user.name}}
-          </p>
-          <p class="comment__list__content">
-            {{jsonData.comments[index].comment}}
-          </p>
+        <li class="comment__list__item" v-for="(item, index) in items" :key="index">
+            <p class="comment__list__ttl">
+              {{item.user.name}}
+            </p>
+            <p class="comment__list__content">
+             {{item.comment}}
+            </p>
         </li>
       </ul>
 
@@ -59,21 +57,21 @@ import firebase from "~/plugins/firebase";
 export default {
   data() {
     return {
-      items: [],
+      items: null,
       comment: "",
-      share_id: "",
+      share_id: this.$route.query.id,
       email: ""
     }
   },
   methods: {
     async  postComment() {
-      this.checkLogin();
       const sendData = {
         comment: this.comment,
-        share_id: this.share.id,
-        email: this.email
+        share_id: this.$route.query.id,
+        user_id: this.$route.query.user_id
       };
       await this.$axios.post("http://127.0.0.1:8000/api/v1/comment/", sendData);
+      this.comment = "";
     },
     checkLogin() {
       firebase.auth().onAuthStateChanged(user => {
@@ -81,10 +79,17 @@ export default {
           this.email = user.email
         }
       })
-    }
+    },
+    async getComment(share_id) {
+      const resData = await this.$axios.get("http://127.0.0.1:8000/api/v1/comment/" + share_id);
+      this.items = resData.data.data;
+    } ,
+    async deleteShare(id) {
+      await this.$axios.delete("http://127.0.0.1:8000/api/v1/share/" + id);
+    },
   },
   mounted() {
-    this.checkLogin();
+    this.getComment(this.$route.query.id)
   },
 }
 </script>
