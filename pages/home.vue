@@ -11,7 +11,7 @@
             <div class="heart">
               <img src="../img/heart.png" @click="changeCount(item.id)">
             </div>
-            <p class="heart__count">{{item.user.like_count}}</p>
+            <p class="heart__count">{{item.like_count}}</p>
 
             <div class="cross" @click="deleteShare(item.id)">
               <img src="../img/cross.png" >
@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     async changeCount(id) {
-        await this.$axios.put("http://127.0.0.1:8000/api/v1/user/" + id);
+        await this.$axios.put("http://127.0.0.1:8000/api/v1/share/" + id);
         location.reload();
     },
     async getShare() {
