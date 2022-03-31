@@ -16,7 +16,7 @@
               <div class="heart">
                 <img src="../img/heart.png">
               </div>
-              <p class="heart__count">{{this.$route.query.user.like_count}}</p>
+              <p class="heart__count">{{this.$route.query.like_count}}</p>
 
               <div class="cross">
                 <img src="../img/cross.png" @click="deleteShare(share_id)">
@@ -31,7 +31,7 @@
       <ul class="comment__list">
         <li class="comment__list__item" v-for="(item, index) in items" :key="index">
             <p class="comment__list__ttl">
-              {{item.user.name}}
+              {{item.user}}
             </p>
             <p class="comment__list__content">
              {{item.comment}}
@@ -81,9 +81,11 @@ export default {
         }
       })
     },
-    async getComment(share_id) {
-      const resData = await this.$axios.get("http://127.0.0.1:8000/api/v1/comment/" + share_id);
+    async getComment() {
+      const sendData = this.share_id;
+      const resData = await this.$axios.get("http://127.0.0.1:8000/api/v1/comment/", sendData);
       this.items = resData.data.data;
+      console.log(this.item);
     } ,
     async deleteShare(id) {
       await this.$axios.delete("http://127.0.0.1:8000/api/v1/share/" + id);
@@ -91,7 +93,7 @@ export default {
     },
   },
   mounted() {
-    this.getComment(this.$route.query.id)
+    this.getComment()
   },
 }
 </script>
