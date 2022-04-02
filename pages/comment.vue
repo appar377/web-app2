@@ -83,7 +83,6 @@ export default {
     },
     async getComment(share_id) {
       const sendData = share_id;
-      console.log(sendData);
       const resData = await this.$axios.get("http://127.0.0.1:8000/api/comment/",sendData);
       this.items = resData.data.data;
       console.log(this.items);
