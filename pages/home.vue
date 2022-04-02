@@ -47,6 +47,12 @@ export default {
         await this.$axios.put("http://127.0.0.1:8000/api/v1/share/" + id);
         location.reload();
     },
+    async insertLike() {
+      const sendData = {
+        
+      };
+      await this.$aios.post("http://127.0.0.1:8000/api/v1/like/", sendData);
+    },
     async getShare() {
       const resData = await this.$axios.get(
         "http://127.0.0.1:8000/api/v1/share/"

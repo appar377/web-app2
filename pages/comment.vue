@@ -31,7 +31,7 @@
       <ul class="comment__list">
         <li class="comment__list__item" v-for="(item, index) in items" :key="index">
             <p class="comment__list__ttl">
-              {{item.user}}
+              {{getUserName(item.user_id)}}
             </p>
             <p class="comment__list__content">
              {{item.comment}}
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { resolve } from "path";
 import firebase from "~/plugins/firebase";
 export default {
   data() {
@@ -60,11 +61,15 @@ export default {
       items: null,
       comment: "",
       share_id: this.$route.query.id,
-      email: ""
+      email: "",
     }
   },
   methods: {
-    async  postComment() {
+    async getUserName(user_id) {
+      const resData = await this.$axios.get("http://127.0.0.1:8000/api/v1/user/" + user_id);
+      return resData.data.data[0].name;
+    },
+    async postComment() {
       const sendData = {
         comment: this.comment,
         share_id: this.$route.query.id,
@@ -82,10 +87,8 @@ export default {
       })
     },
     async getComment(share_id) {
-      const sendData = share_id;
-      const resData = await this.$axios.get("http://127.0.0.1:8000/api/comment/",sendData);
-      this.items = resData.data.data;
-      console.log(this.items);
+      const resData = await this.$axios.get("http://127.0.0.1:8000/api/comment?share_id=" + share_id);
+      this.items = resData.data.data.comments;
     } ,
     async deleteShare(id) {
       await this.$axios.delete("http://127.0.0.1:8000/api/v1/share/" + id);
