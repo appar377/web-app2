@@ -31,7 +31,7 @@
       <ul class="comment__list">
         <li class="comment__list__item" v-for="(item, index) in items" :key="index">
             <p class="comment__list__ttl">
-              {{getUserName(item.user_id)}}
+              {{user_names[index]}}
             </p>
             <p class="comment__list__content">
              {{item.comment}}
@@ -59,6 +59,7 @@ export default {
   data() {
     return {
       items: null,
+      user_names: [],
       comment: "",
       share_id: this.$route.query.id,
       email: "",
@@ -67,7 +68,7 @@ export default {
   methods: {
     async getUserName(user_id) {
       const resData = await this.$axios.get("http://127.0.0.1:8000/api/v1/user/" + user_id);
-      return resData.data.data[0].name;
+      this.user_names.push(resData.data.data[0].name);
     },
     async postComment() {
       const sendData = {
@@ -89,6 +90,10 @@ export default {
     async getComment(share_id) {
       const resData = await this.$axios.get("http://127.0.0.1:8000/api/comment?share_id=" + share_id);
       this.items = resData.data.data.comments;
+
+      for(var i=0; i<=resData.data.data.comments.length; i++) {
+        getUserName(resData.data.data.comments[i].user_id)
+      }
     } ,
     async deleteShare(id) {
       await this.$axios.delete("http://127.0.0.1:8000/api/v1/share/" + id);
