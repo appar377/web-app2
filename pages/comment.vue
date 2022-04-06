@@ -92,7 +92,7 @@ export default {
       this.items = resData.data.data.comments;
 
       for(var i=0; i<=resData.data.data.comments.length; i++) {
-        getUserName(resData.data.data.comments[i].user_id)
+        this.getUserName(resData.data.data.comments[i].user_id)
       }
     } ,
     async deleteShare(id) {

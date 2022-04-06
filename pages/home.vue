@@ -9,7 +9,7 @@
           <div class="list__item__display">
             <h3 class="share__list__ttl">{{item.user.name}}</h3>
             <div class="heart">
-              <img src="../img/heart.png" @click="changeCount(item.id)">
+              <img src="../img/heart.png" @click="insertLike(item.id)">
             </div>
             <p class="heart__count">{{item.like_count}}</p>
 
@@ -40,18 +40,22 @@ export default {
     return {
       items: [],
       email: null,
+      share_id: null,
     }
   },
   methods: {
-    async changeCount(id) {
-        await this.$axios.put("http://127.0.0.1:8000/api/v1/share/" + id);
-        location.reload();
+    getShareId(share_id) {
+      this.share_id = share_id;
     },
-    async insertLike() {
+    async insertLike(share_id) {
+      this.getShareId(share_id);
       const sendData = {
-        
+        email: this.email,
+        share_id: this.share_id,
       };
-      await this.$aios.post("http://127.0.0.1:8000/api/v1/like/", sendData);
+      console.log(sendData);
+      const resData = await this.$axios.post("http://127.0.0.1:8000/api/v1/like/", sendData);
+      location.reload();
     },
     async getShare() {
       const resData = await this.$axios.get(
