@@ -55,7 +55,7 @@ export default {
       };
       console.log(sendData);
       const resData = await this.$axios.post("http://127.0.0.1:8000/api/v1/like/", sendData);
-      location.reload();
+      this.getShare();
     },
     async getShare() {
       const resData = await this.$axios.get(
@@ -143,5 +143,9 @@ export default {
 
 .detail {
   padding-left: 40px;
+}
+
+button:hover {
+  cursor: pointer;
 }
 </style>

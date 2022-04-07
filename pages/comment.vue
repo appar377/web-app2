@@ -10,7 +10,7 @@
 
             <div class="list__item__display">
               <h3 class="share__list__ttl">
-                {{this.$route.query.user.name}}
+                {{share_user_name}}
               </h3>
 
               <div class="heart">
@@ -59,6 +59,7 @@ export default {
   data() {
     return {
       items: null,
+      share_user_name: "",
       user_names: [],
       comment: "",
       share_id: this.$route.query.id,
@@ -90,6 +91,7 @@ export default {
     async getComment(share_id) {
       const resData = await this.$axios.get("http://127.0.0.1:8000/api/comment?share_id=" + share_id);
       this.items = resData.data.data.comments;
+      this.share_user_name = resData.data.data.user.name;
 
       for(var i=0; i<=resData.data.data.comments.length; i++) {
         this.getUserName(resData.data.data.comments[i].user_id)
@@ -220,6 +222,10 @@ export default {
   color: white;
   border-radius: 20px;
   padding: 10px 20px;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 </style>

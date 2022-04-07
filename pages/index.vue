@@ -122,4 +122,8 @@ button {
   border-radius: 20px;
   padding: 10px 20px;
 }
+
+button:hover {
+  cursor: pointer;
+}
 </style>
