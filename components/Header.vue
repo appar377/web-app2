@@ -38,4 +38,8 @@
   text-decoration: none;
   color: white;
 }
+
+.header__right__item:hover {
+  cursor: pointer;
+}
 </style>

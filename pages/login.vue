@@ -45,7 +45,7 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(() => {
-          this.$router.push({ path: '/home' , query :{ email: this.email, password: this.password }})
+          this.$router.push('/home');
         })
     }
   },
@@ -88,6 +88,10 @@ button {
 }
 
 button:hover {
+  cursor: pointer;
+}
+
+input:hover {
   cursor: pointer;
 }
 </style>

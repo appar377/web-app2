@@ -14,9 +14,9 @@
               </h3>
 
               <div class="heart">
-                <img src="../img/heart.png">
+                <img src="../img/heart.png" @click="insertLike(share_id)">
               </div>
-              <p class="heart__count">{{this.$route.query.like_count}}</p>
+              <p class="heart__count">{{like_count}}</p>
 
               <div class="cross">
                 <img src="../img/cross.png" @click="deleteShare(share_id)">
@@ -53,7 +53,6 @@
 </template>
 
 <script>
-import { resolve } from "path";
 import firebase from "~/plugins/firebase";
 export default {
   data() {
@@ -64,9 +63,23 @@ export default {
       comment: "",
       share_id: this.$route.query.id,
       email: "",
+      like_count: "",
     }
   },
   methods: {
+    getShareId(share_id) {
+      this.share_id = share_id;
+    },
+    async insertLike(share_id) {
+      this.getShareId(share_id);
+      const sendData = {
+        email: this.email,
+        share_id: this.share_id,
+      };
+      const resData = await this.$axios.post("http://127.0.0.1:8000/api/v1/like/", sendData);
+      this.getComment(share_id);
+    },
+
     async getUserName(user_id) {
       const resData = await this.$axios.get("http://127.0.0.1:8000/api/v1/user/" + user_id);
       this.user_names.push(resData.data.data[0].name);
@@ -90,6 +103,7 @@ export default {
     },
     async getComment(share_id) {
       const resData = await this.$axios.get("http://127.0.0.1:8000/api/comment?share_id=" + share_id);
+      this.like_count = resData.data.data.like_count;
       this.items = resData.data.data.comments;
       this.share_user_name = resData.data.data.user.name;
 
@@ -104,6 +118,7 @@ export default {
   },
   mounted() {
     this.getComment(this.$route.query.id)
+    this.checkLogin();
   },
 }
 </script>
@@ -162,6 +177,12 @@ export default {
   padding: 10px;
 }
 
+.heart:hover,
+.cross:hover,
+.heart__count:hover {
+  cursor: pointer;
+}
+
 .heart img,
 .cross img {
   width: 100%;
@@ -183,6 +204,7 @@ export default {
   padding: 10px;
 }
 
+
 .comment__list__ttl {
   font-size: 15px;
   padding-bottom: 5px;
@@ -196,6 +218,10 @@ export default {
   width: 100%;
   text-align: center;
   padding: 20px 0;
+}
+
+.comment__input input:hover {
+  cursor: pointer;
 }
 
 .comment__form {

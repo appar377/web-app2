@@ -25,6 +25,8 @@
 
 <script>
 import firebase from '~/plugins/firebase';
+import Home from '../pages/home.vue';
+
 export default {
   data() {
     return {
@@ -56,8 +58,8 @@ export default {
       };
       await this.$axios.post("http://127.0.0.1:8000/api/v1/share/", sendData);
       this.share = "";
-      location.reload();
-    }
+      this.$emit('home-emit');
+    },
   },
   mounted() {
     this.checkLogin();
@@ -82,6 +84,10 @@ export default {
 
 .aside__list li {
   padding: 10px 15px;
+}
+
+.aside__list li:hover {
+  cursor: pointer;
 }
 
 .aside__list-home::before {
@@ -124,6 +130,10 @@ export default {
   background-color: black;
   caret-color: white;
   color: white;
+}
+
+.share__form textarea:hover {
+  cursor: pointer;
 }
 
 .share__form button {

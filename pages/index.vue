@@ -50,7 +50,7 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((data) => {
           data.user.sendEmailVerification().then(() => {
-            this.$router.replace({ path: '/home' , query :{ name: this.name, email: this.email }})
+            this.$router.replace('/home');
           })
         })
         .catch((error) => {

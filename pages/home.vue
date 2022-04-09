@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Aside class="aside"></Aside>
+    <Aside class="aside" @home-emit="getShare"></Aside>
 
     <div class="share__wrapper">
       <h2 class="share__wrapper__ttl">ホーム</h2>
@@ -30,8 +30,7 @@
 
 <script>
 import firebase from "~/plugins/firebase";
-import Aside
- from "~/components/Aside.vue";
+
 export default {
   comments: {
     Aside
@@ -53,7 +52,6 @@ export default {
         email: this.email,
         share_id: this.share_id,
       };
-      console.log(sendData);
       const resData = await this.$axios.post("http://127.0.0.1:8000/api/v1/like/", sendData);
       this.getShare();
     },
@@ -127,6 +125,13 @@ export default {
 .heart__count {
   width: 20px;
   padding: 10px;
+}
+
+.heart:hover,
+.cross:hover,
+.detail:hover,
+.heart__count:hover {
+  cursor: pointer;
 }
 
 .share__list__ttl {
